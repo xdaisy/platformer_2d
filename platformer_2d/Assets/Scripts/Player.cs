@@ -33,6 +33,10 @@ public class Player : MonoBehaviour {
         myRigidBody.velocity = new Vector2(moveX, moveY) * MoveSpeed;
 
         anim.SetFloat("xMove", moveX);
-        anim.SetFloat("lastXMove", moveX);
+        anim.SetBool("isMoving", moveX > 0.1 || moveX < -0.1);
+
+        if (moveX > 0.1 || moveX < -0.1) {
+            anim.SetFloat("lastXMove", moveX);
+        }
     }
 }
