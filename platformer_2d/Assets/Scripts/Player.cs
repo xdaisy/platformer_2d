@@ -9,8 +9,6 @@ public class Player : MonoBehaviour {
     private BoxCollider2D boxCollider2d;
     private Animator anim;
 
-    private bool jump;
-
     // Start is called before the first frame update
     void Start() {
         myRigidBody = GetComponent<Rigidbody2D>();
@@ -21,7 +19,6 @@ public class Player : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         if (isGrounded() && Input.GetButtonDown("Jump")) {
-            jump = false;
             myRigidBody.velocity = Vector2.up * MoveSpeed;
         }
 
