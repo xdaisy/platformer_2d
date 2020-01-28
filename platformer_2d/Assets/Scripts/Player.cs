@@ -2,6 +2,7 @@
 
 public class Player : MonoBehaviour {
     public float MoveSpeed;
+    public float JumpMovement;
 
     [SerializeField] private LayerMask platformLayerMask; // which layer want to hit with raycast
 
@@ -19,7 +20,7 @@ public class Player : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         if (isGrounded() && Input.GetButtonDown("Jump")) {
-            myRigidBody.velocity = Vector2.up * MoveSpeed;
+            myRigidBody.velocity = Vector2.up * JumpMovement;
         }
 
         handleMovement();
