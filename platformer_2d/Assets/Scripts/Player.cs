@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour {
     public float MoveSpeed;
@@ -28,17 +29,41 @@ public class Player : MonoBehaviour {
 
     }
 
+    public void Death() {
+        // TODO: Play death animation
+        // decrement lives
+        Inventory.Instance.Died();
+
+        if (Inventory.Instance.GetNumLives() < 0) {
+            // if run out of lives, go to game over scene
+            SceneManager.LoadScene(Constants.GAME_OVER_SCENE);
+        } else {
+            // reset stage
+            SceneManager.LoadScene(Constants.STAGE_SCENE);
+        }
+    }
+
+    /// <summary>
+    /// Determines whether or not the player is grounded
+    /// </summary>
+    /// <returns>True if the player is on the ground, false otherwise</returns>
     private bool isGrounded() {
         RaycastHit2D rayCast2d = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size, 0f, Vector2.down, 0.1f, platformLayerMask);
         return rayCast2d;
     }
 
+    /// <summary>
+    /// Move the player
+    /// </summary>
     private void handleMovement() {
         float moveX = Input.GetAxisRaw("Horizontal");
 
         myRigidBody.velocity = new Vector2(moveX * MoveSpeed, myRigidBody.velocity.y);
     }
 
+    /// <summary>
+    /// Determine which animation to play
+    /// </summary>
     private void handleAnimation() {
         float moveX = myRigidBody.velocity.x;
 

@@ -4,15 +4,23 @@
 /// Class that keeps track of the player's inventory
 /// </summary>
 public class Inventory : MonoBehaviour {
+    public static Inventory Instance;
+
     private int NumCatGrass;
-    private int NumLives;
+    private static int NumLives;
     private int Score;
 
     // Start is called before the first frame update
     void Start() {
-        NumCatGrass = 0;
-        NumLives = 4;
-        Score = 0;
+        if (Inventory.Instance == null) {
+            Instance = this;
+            NumCatGrass = 0;
+            NumLives = Constants.DEFAULT_LIVES;
+            Score = 0;
+            DontDestroyOnLoad(this.gameObject);
+        } else {
+            Destroy(this.gameObject);
+        }
     }
 
     /// <summary>
@@ -54,6 +62,14 @@ public class Inventory : MonoBehaviour {
     }
 
     /// <summary>
+    /// Increment the number of lives by the number passed in
+    /// </summary>
+    /// <param name="lives">Number of lives to increment by, default to 1</param>
+    public void IncrementLives(int lives = 1) {
+        NumLives += lives;
+    }
+
+    /// <summary>
     /// Add to the score
     /// </summary>
     /// <param name="score">Amount to add to the score</param>
@@ -69,4 +85,12 @@ public class Inventory : MonoBehaviour {
         return this.Score;
     }
 
+    /// <summary>
+    /// Reset the inventory back to default value
+    /// </summary>
+    public void ResetInventory() {
+        NumCatGrass = 0;
+        NumLives = Constants.DEFAULT_LIVES;
+        Score = 0;
+    }
 }
