@@ -29,7 +29,6 @@ public class Inventory : MonoBehaviour {
     /// <param name="numCatGrass">Number of cat grass to be added</param>
     public void AddCatGrass(int numCatGrass) {
         NumCatGrass += numCatGrass;
-        Score += 100 * numCatGrass;
 
         if (NumCatGrass >= 100) {
             // if get 100 cat grass, get an extra life

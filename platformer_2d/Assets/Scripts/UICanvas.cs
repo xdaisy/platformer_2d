@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Class for displaying score, cat grass, and lives
+/// </summary>
 public class UICanvas : MonoBehaviour {
     [SerializeField] private Text numCatGrass;
     [SerializeField] private Text score;

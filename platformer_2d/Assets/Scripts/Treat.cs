@@ -1,14 +1,15 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// Class that handles collecting cat grass
+/// Class that handle treat powering up player
 /// </summary>
-public class CatGrass : MonoBehaviour {
+public class Treat : MonoBehaviour {
     [SerializeField] private int score;
     private void OnCollisionEnter2D(Collision2D other) {
         if (other.gameObject.CompareTag("Player")) {
-            // if player collided with, add cat grass to inventory
-            Inventory.Instance.AddCatGrass(1);
+            // if player collided with, power up player
+            Player player = other.gameObject.GetComponent<Player>();
+            player.PowerUp();
             Inventory.Instance.IncrementScore(score);
 
             Destroy(gameObject);

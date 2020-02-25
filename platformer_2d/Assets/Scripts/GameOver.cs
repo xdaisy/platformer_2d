@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Class for Game Over screen
+/// </summary>
 public class GameOver : MonoBehaviour {
     /// <summary>
     /// Restart the stage
