@@ -6,16 +6,20 @@
 public class Roomba : Enemy {
     private Transform player;
     private Animator anim;
+    private SpriteRenderer spriteRend;
 
     // Start is called before the first frame update
     void Start() {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         anim = GetComponent<Animator>();
+        spriteRend = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
     void Update() {
-        move();
+        if (isWithinCameraView()) {
+            move();
+        }
     }
 
     /// <summary>
@@ -35,5 +39,14 @@ public class Roomba : Enemy {
             // is moving left
             anim.SetFloat("Direction", -1f);
         }
+    }
+
+    private bool isWithinCameraView() {
+        CustomCamera cam = GameObject.FindObjectOfType<CustomCamera>();
+        return cam.IsWithinView(
+            this.transform,
+            spriteRend.bounds.size.x,
+            spriteRend.bounds.size.y
+        );
     }
 }
