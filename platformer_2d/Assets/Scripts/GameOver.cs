@@ -17,6 +17,7 @@ public class GameOver : MonoBehaviour {
     /// Return to main menu scene
     /// </summary>
     public void ClickNo() {
-        // TODO: Go back to main menu
+        Inventory.Instance.ResetInventory();
+        SceneManager.LoadScene(Constants.MAIN_SCENE);
     }
 }

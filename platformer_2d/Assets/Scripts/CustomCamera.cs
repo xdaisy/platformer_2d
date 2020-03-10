@@ -4,6 +4,7 @@ using UnityEngine.Tilemaps;
 public class CustomCamera : MonoBehaviour {
     public Transform Player;
     public Tilemap BG;
+    [SerializeField] private int offset;
 
     private Vector3 minPos;
     private Vector3 maxPos;
@@ -43,35 +44,41 @@ public class CustomCamera : MonoBehaviour {
     /// Get whether or not the object is within the camera view
     /// </summary>
     /// <param name="other">Transform of the object want to check if is within camera view</param>
-    /// <param name="height">Height of the object</param>
     /// <param name="width">Width of the object</param>
+    /// <param name="height">Height of the object</param>
     /// <returns>True if the object is within camera view, false otherwise</returns>
-    public bool IsWithinView(Transform other, float height, float width) {
-        float otherHalfHeight = height / 2;
+    public bool IsWithinView(Transform other, float width, float height) {
+        // half width and height of other object
         float otherHalfWidth = width / 2;
+        float otherHalfHeight = height / 2;
+
+        // other lower and upper x position
         Vector3 otherLowerLeft = new Vector3(
             other.position.x - otherHalfWidth,
-            other.position.y - otherHalfHeight
+            other.position.y - otherHalfHeight,
+            0
         );
         Vector3 otherUpperRight = new Vector3(
             other.position.x + otherHalfWidth,
-            other.position.y + otherHalfHeight
+            other.position.y + otherHalfHeight,
+            0
         );
 
+        // this lower and upper x position
         Vector3 thisLowerLeft = new Vector3(
             this.transform.position.x - this.halfWidth,
-            this.transform.position.y - this.halfHeight
+            this.transform.position.y - this.halfHeight,
+            0
         );
         Vector3 thisUpperRight = new Vector3(
             this.transform.position.x + this.halfWidth,
-            this.transform.position.y + this.halfHeight
+            this.transform.position.y + this.halfHeight,
+            0
         );
 
-        //return thisLowerLeft.x < otherLowerLeft.x && otherLowerLeft.x < thisUpperRight.x &&
-        //    thisLowerLeft.x < otherUpperRight.x && otherUpperRight.x < thisUpperRight.x &&
-        //    thisLowerLeft.y < otherLowerLeft.y && otherLowerLeft.y < thisUpperRight.y &&
-        //    thisLowerLeft.y < otherUpperRight.y && otherUpperRight.y < thisUpperRight.y;
-        return thisLowerLeft.x < other.position.x && other.position.x < thisUpperRight.x &&
-            thisLowerLeft.y < other.position.y && other.position.y < thisUpperRight.y;
+        return thisLowerLeft.x - offset <= otherUpperRight.x && 
+            otherLowerLeft.x <= thisUpperRight.x + offset &&
+            thisLowerLeft.y - offset <= otherUpperRight.y &&
+            otherLowerLeft.y <= thisUpperRight.y + offset;
     }
 }
