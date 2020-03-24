@@ -2,13 +2,13 @@
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// Class for Game Over screen
+/// Class for game over
 /// </summary>
 public class GameOver : MonoBehaviour {
     /// <summary>
     /// Restart the stage
     /// </summary>
-    public void ClickYes() {
+    public void PlayAgain() {
         Inventory.Instance.ResetInventory();
         SceneManager.LoadScene(Constants.STAGE_SCENE);
     }
@@ -16,7 +16,7 @@ public class GameOver : MonoBehaviour {
     /// <summary>
     /// Return to main menu scene
     /// </summary>
-    public void ClickNo() {
+    public void Quit() {
         Inventory.Instance.ResetInventory();
         SceneManager.LoadScene(Constants.MAIN_SCENE);
     }

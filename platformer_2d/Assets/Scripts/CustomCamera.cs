@@ -20,8 +20,9 @@ public class CustomCamera : MonoBehaviour {
 
         // get the height and width of the camera view
         Camera cam = this.GetComponent<Camera>();
-        halfHeight = 2f * cam.orthographicSize / 2;
-        halfWidth = halfHeight * cam.aspect / 2;
+        float height = 2f * cam.orthographicSize;
+        halfHeight = height / 2;
+        halfWidth = height * cam.aspect / 2;
     }
 
     // Update is called once per frame
