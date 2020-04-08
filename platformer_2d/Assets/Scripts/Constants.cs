@@ -7,4 +7,6 @@ public static class Constants {
     public const string STAGE_SCENE = "Stage";
     public const string WIN_SCENE = "Complete";
     public const int DEFAULT_LIVES = 4;
+
+    public const float ANIMATION_TIME = 1f;
 }

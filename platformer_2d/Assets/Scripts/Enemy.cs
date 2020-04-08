@@ -9,11 +9,12 @@ public class Enemy : MonoBehaviour {
 
     private void OnCollisionStay2D(Collision2D other) {
         if (other.gameObject.CompareTag("Player")) {
-            Vector2 thisPos = this.transform.position;
-            Vector2 playerPos = other.transform.position;
-            float angle = Vector2.Angle(playerPos, thisPos);
+            Vector3 thisPos = this.transform.position;
+            Vector3 playerPos = other.transform.position;
+            float angle = Mathf.Atan2(playerPos.y - thisPos.y, playerPos.x - thisPos.x) * 180 / Mathf.PI;
+            if (angle < 0) angle += 360f;
 
-            if (angle < 4f) {
+            if (45f < angle && angle < 135f) {
                 // enemy dies
                 Destroy(this.gameObject);
                 Inventory.Instance.IncrementScore(this.score);

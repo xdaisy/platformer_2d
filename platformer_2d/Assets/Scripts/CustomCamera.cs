@@ -3,21 +3,15 @@ using UnityEngine.Tilemaps;
 
 public class CustomCamera : MonoBehaviour {
     public Transform Player;
-    public Tilemap BG;
     [SerializeField] private int offset;
-
-    private Vector3 minPos;
-    private Vector3 maxPos;
+    [SerializeField] private Vector3 minPos; // lower left corner
+    [SerializeField] private Vector3 maxPos; // upper right corner
 
     private float halfWidth;
     private float halfHeight;
 
     // Start is called before the first frame update
     void Start() {
-        // get lower left corner and upper right corner of the map
-        minPos = BG.origin;
-        maxPos = BG.origin + BG.size;
-
         // get the height and width of the camera view
         Camera cam = this.GetComponent<Camera>();
         float height = 2f * cam.orthographicSize;

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
@@ -10,6 +11,7 @@ public class Player : MonoBehaviour {
 
     [SerializeField] private LayerMask platformLayerMask; // which layer want to hit with raycast
     [SerializeField] private float invincibilityFrame;
+    [SerializeField] private bool canMove = true;
 
     private Rigidbody2D myRigidBody;
     private BoxCollider2D boxCollider2d;
@@ -45,6 +47,7 @@ public class Player : MonoBehaviour {
         if (invincibilityCoolDown <= 0f && poweredUp) {
             poweredUp = false;
             invincibilityCoolDown = invincibilityFrame;
+            StartCoroutine(playPowerDownAnim());
         } else if (invincibilityCoolDown <= 0f) {
             // TODO: Play death animation
             // decrement lives
@@ -66,6 +69,7 @@ public class Player : MonoBehaviour {
     public void PowerUp() {
         if (!poweredUp) {
             // power up
+            StartCoroutine(playPowerUpAnim());
             poweredUp = true;
         }
     }
@@ -83,31 +87,38 @@ public class Player : MonoBehaviour {
     /// Move the player
     /// </summary>
     private void handleMovement() {
-        float moveX = Input.GetAxisRaw("Horizontal");
+        if (canMove) {
+            float moveX = Input.GetAxisRaw("Horizontal");
 
-        myRigidBody.velocity = new Vector2(moveX * MoveSpeed, myRigidBody.velocity.y);
+            myRigidBody.velocity = new Vector2(moveX * MoveSpeed, myRigidBody.velocity.y);
+        } else {
+            myRigidBody.velocity = Vector2.zero;
+        }
     }
 
     /// <summary>
     /// Determine which animation to play
     /// </summary>
     private void handleAnimation() {
-        float moveX = myRigidBody.velocity.x;
+        if (canMove) {
+            float moveX = myRigidBody.velocity.x;
 
-        anim.SetFloat("xMove", moveX);
+            anim.SetFloat("xMove", moveX);
+            anim.SetBool("poweredUp", poweredUp);
 
-        if (moveX > 0.1 || moveX < -0.1) {
-            anim.SetFloat("lastXMove", moveX);
-        }
+            if (moveX > 0.1 || moveX < -0.1) {
+                anim.SetFloat("lastXMove", moveX);
+            }
 
-        if (isGrounded()) {
-            // is on the ground
-            anim.SetBool("isJumping", false);
-            anim.SetBool("isMoving", moveX > 0.1 || moveX < -0.1);
-        } else {
-            // is in the air
-            anim.SetBool("isMoving", false);
-            anim.SetBool("isJumping", true);
+            if (isGrounded()) {
+                // is on the ground
+                anim.SetBool("isJumping", false);
+                anim.SetBool("isMoving", moveX > 0.1 || moveX < -0.1);
+            } else {
+                // is in the air
+                anim.SetBool("isMoving", false);
+                anim.SetBool("isJumping", true);
+            }
         }
     }
 
@@ -118,5 +129,25 @@ public class Player : MonoBehaviour {
         if (invincibilityCoolDown > 0f) {
             invincibilityCoolDown -= Time.deltaTime;
         }
+    }
+
+    private IEnumerator playPowerUpAnim() {
+        anim.SetBool("poweringUp", true);
+
+        yield return new WaitForSeconds(Constants.ANIMATION_TIME);
+
+        anim.SetBool("poweringUp", false);
+
+        yield break;
+    }
+
+    private IEnumerator playPowerDownAnim() {
+        anim.SetBool("poweringDown", true);
+
+        yield return new WaitForSeconds(Constants.ANIMATION_TIME);
+
+        anim.SetBool("poweringDown", false);
+
+        yield break;
     }
 }
