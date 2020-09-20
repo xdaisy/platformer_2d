@@ -17,6 +17,7 @@ public class Player : MonoBehaviour {
     private BoxCollider2D boxCollider2d;
     private Animator anim;
 
+    private bool stageHasFinished;
     private bool poweredUp;
     private float invincibilityCoolDown;
 
@@ -75,6 +76,13 @@ public class Player : MonoBehaviour {
     }
 
     /// <summary>
+    /// Set the flag that stage has been finished
+    /// </summary>
+    public void FinishedStage() {
+        this.stageHasFinished = true;
+    }
+
+    /// <summary>
     /// Determines whether or not the player is grounded
     /// </summary>
     /// <returns>True if the player is on the ground, false otherwise</returns>
@@ -87,12 +95,29 @@ public class Player : MonoBehaviour {
     /// Move the player
     /// </summary>
     private void handleMovement() {
-        if (canMove) {
-            float moveX = Input.GetAxisRaw("Horizontal");
+        if (!stageHasFinished) {
+            // if game is still continuing
+            if (canMove) {
+                float moveX = Input.GetAxisRaw("Horizontal");
 
-            myRigidBody.velocity = new Vector2(moveX * MoveSpeed, myRigidBody.velocity.y);
+                myRigidBody.velocity = new Vector2(moveX * MoveSpeed, myRigidBody.velocity.y);
+            } else {
+                // freeze the player in the current position they are in
+                myRigidBody.velocity = Vector2.zero;
+            }
         } else {
-            myRigidBody.velocity = Vector2.zero;
+            // stage has been finished
+            if (isGrounded()) {
+                // if the player is grounded
+                anim.SetBool("isMoving", false);
+                anim.SetBool("isJumping", false);
+
+                // play animation
+                CustomCamera cam = GameObject.FindObjectOfType<CustomCamera>();
+                EndStage.Instance.PlayEndAnimation(poweredUp);
+                cam.StopFollowingPlayer();
+                Destroy(this.gameObject);
+            }
         }
     }
 

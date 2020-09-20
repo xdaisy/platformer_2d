@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.Tilemaps;
 
 public class CustomCamera : MonoBehaviour {
     public Transform Player;
@@ -9,6 +8,8 @@ public class CustomCamera : MonoBehaviour {
 
     private float halfWidth;
     private float halfHeight;
+
+    private bool doNotFollowPlayer;
 
     // Start is called before the first frame update
     void Start() {
@@ -21,7 +22,9 @@ public class CustomCamera : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        followPlayer();
+        if (!doNotFollowPlayer) {
+            followPlayer();
+        }
     }
 
     /// <summary>
@@ -75,5 +78,12 @@ public class CustomCamera : MonoBehaviour {
             otherLowerLeft.x <= thisUpperRight.x + offset &&
             thisLowerLeft.y - offset <= otherUpperRight.y &&
             otherLowerLeft.y <= thisUpperRight.y + offset;
+    }
+
+    /// <summary>
+    /// Stop the camera from following the player
+    /// </summary>
+    public void StopFollowingPlayer() {
+        this.doNotFollowPlayer = true;
     }
 }
