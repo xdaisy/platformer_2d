@@ -7,7 +7,7 @@ public class EndStage : MonoBehaviour {
 
     private Animator anim;
 
-    private float animationTime = 1.5f;
+    private float animationTime = 5.5f;
 
     // Start is called before the first frame update
     void Start() {
