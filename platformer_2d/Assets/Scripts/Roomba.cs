@@ -26,18 +26,21 @@ public class Roomba : Enemy {
     /// Roomba follows the player in its movement
     /// </summary>
     private void move() {
-        Vector2 newPos = new Vector2(player.position.x, this.transform.position.y); // follow player
-        int moveSpeed = this.GetMoveSpeed();
+        if (!EndStage.Instance.HasStageFinished()) {
+            // if stage is not finished
+            Vector2 newPos = new Vector2(player.position.x, this.transform.position.y); // follow player
+            int moveSpeed = this.GetMoveSpeed();
 
-        transform.position = Vector2.MoveTowards(transform.position, newPos, moveSpeed * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, newPos, moveSpeed * Time.deltaTime);
 
-        float direction = player.position.x - this.transform.position.x;
-        if (direction > 0) {
-            // is moving right
-            anim.SetFloat("Direction", 1f);
-        } else {
-            // is moving left
-            anim.SetFloat("Direction", -1f);
+            float direction = player.position.x - this.transform.position.x;
+            if (direction > 0) {
+                // is moving right
+                anim.SetFloat("Direction", 1f);
+            } else {
+                // is moving left
+                anim.SetFloat("Direction", -1f);
+            }
         }
     }
 

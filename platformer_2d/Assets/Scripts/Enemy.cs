@@ -6,19 +6,20 @@
 public class Enemy : MonoBehaviour {
     [SerializeField] private int moveSpeed; // movement speed of the enemy
     [SerializeField] private int score;
+    [SerializeField] private LayerMask enemyLayerMask;
 
-    private void OnCollisionStay2D(Collision2D other) {
+    private void OnCollisionEnter2D(Collision2D other) {
         if (other.gameObject.CompareTag("Player")) {
-            Vector3 thisPos = this.transform.position;
-            Vector3 playerPos = other.transform.position;
-            float angle = Mathf.Atan2(playerPos.y - thisPos.y, playerPos.x - thisPos.x) * 180 / Mathf.PI;
-            if (angle < 0) angle += 360f;
-
-            if (45f < angle && angle < 135f) {
-                // enemy dies
+            BoxCollider2D otherCollider = other.gameObject.GetComponent<BoxCollider2D>();
+            RaycastHit2D rayCast2d = Physics2D.BoxCast(otherCollider.bounds.center, otherCollider.bounds.size, 0f, Vector2.down, 0.1f, enemyLayerMask);
+            if (rayCast2d) {
+                // player is on top of enemy
+                Player player = other.gameObject.GetComponent<Player>();
+                player.ApplyBounce();
                 Destroy(this.gameObject);
                 Inventory.Instance.IncrementScore(this.score);
             } else {
+                // player is not on top of enemy
                 Player player = other.gameObject.GetComponent<Player>();
                 player.Hit();
             }

@@ -17,7 +17,6 @@ public class Player : MonoBehaviour {
     private BoxCollider2D boxCollider2d;
     private Animator anim;
 
-    private bool stageHasFinished;
     private bool poweredUp;
     private float invincibilityCoolDown;
 
@@ -33,7 +32,7 @@ public class Player : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         if (isGrounded() && Input.GetButtonDown("Jump")) {
-            myRigidBody.velocity = Vector2.up * JumpMovement;
+            jump();
         }
 
         handleMovement();
@@ -76,10 +75,10 @@ public class Player : MonoBehaviour {
     }
 
     /// <summary>
-    /// Set the flag that stage has been finished
+    /// Tell the player to bounce
     /// </summary>
-    public void FinishedStage() {
-        this.stageHasFinished = true;
+    public void ApplyBounce() {
+        jump();
     }
 
     /// <summary>
@@ -92,10 +91,17 @@ public class Player : MonoBehaviour {
     }
 
     /// <summary>
+    /// Make the player jump
+    /// </summary>
+    private void jump() {
+        myRigidBody.velocity = Vector2.up * JumpMovement;
+    }
+
+    /// <summary>
     /// Move the player
     /// </summary>
     private void handleMovement() {
-        if (!stageHasFinished) {
+        if (!EndStage.Instance.HasStageFinished()) {
             // if game is still continuing
             if (canMove) {
                 float moveX = Input.GetAxisRaw("Horizontal");

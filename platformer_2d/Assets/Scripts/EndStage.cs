@@ -9,14 +9,11 @@ public class EndStage : MonoBehaviour {
 
     private float animationTime = 5.5f;
 
+    private bool stageHasFinished = false;
+
     // Start is called before the first frame update
     void Start() {
-        if (EndStage.Instance == null) {
-            Instance = this;
-            DontDestroyOnLoad(this.gameObject);
-        } else {
-            Destroy(this.gameObject);
-        }
+        Instance = this;
         anim = GetComponent<Animator>();
     }
 
@@ -41,5 +38,20 @@ public class EndStage : MonoBehaviour {
         yield return new WaitForSeconds(animationTime);
 
         SceneManager.LoadScene(Constants.WIN_SCENE);
+    }
+
+    /// <summary>
+    /// Set the flag that stage has been finished
+    /// </summary>
+    public void FinishedStage() {
+        this.stageHasFinished = true;
+    }
+
+    /// <summary>
+    /// Get whether or not the stage has finished
+    /// </summary>
+    /// <returns>True if the stage has finished, false otherwise</returns>
+    public bool HasStageFinished() {
+        return this.stageHasFinished;
     }
 }

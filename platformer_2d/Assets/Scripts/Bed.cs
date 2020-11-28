@@ -5,9 +5,8 @@
 /// </summary>
 public class Bed : MonoBehaviour {
     private void OnCollisionEnter2D(Collision2D other) {
-        // TODO: animate
-
-        Player player = other.gameObject.GetComponent<Player>();
-        player.FinishedStage();
+        if (other.gameObject.CompareTag("Player")) {
+            EndStage.Instance.FinishedStage();
+        }
     }
 }

@@ -19,7 +19,7 @@ public class Inventory : MonoBehaviour {
             Score = 0;
             DontDestroyOnLoad(this.gameObject);
         } else {
-            Destroy(this.gameObject);
+            Destroy(this);
         }
     }
 

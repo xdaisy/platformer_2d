@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8799347983915828053}
   - component: {fileID: 8799347983915828042}
   - component: {fileID: 8799347983915828043}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Roomba
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -163,3 +163,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 3
   score: 750
+  enemyLayerMask:
+    serializedVersion: 2
+    m_Bits: 512
