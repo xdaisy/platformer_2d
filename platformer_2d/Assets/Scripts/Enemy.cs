@@ -10,16 +10,16 @@ public class Enemy : MonoBehaviour {
 
     private void OnCollisionEnter2D(Collision2D other) {
         if (other.gameObject.CompareTag("Player")) {
-            BoxCollider2D otherCollider = other.gameObject.GetComponent<BoxCollider2D>();
-            RaycastHit2D rayCast2d = Physics2D.BoxCast(otherCollider.bounds.center, otherCollider.bounds.size, 0f, Vector2.down, 0.1f, enemyLayerMask);
-            if (rayCast2d) {
-                // player is on top of enemy
+            Vector3 hit = other.contacts[0].normal;
+            float angle = Vector3.Angle(hit, Vector3.up);
+            if (Mathf.Approximately(angle, 180)) {
+                // Up
                 Player player = other.gameObject.GetComponent<Player>();
                 player.ApplyBounce();
                 Destroy(this.gameObject);
                 Inventory.Instance.IncrementScore(this.score);
             } else {
-                // player is not on top of enemy
+                // Not Up
                 Player player = other.gameObject.GetComponent<Player>();
                 player.Hit();
             }

@@ -17,16 +17,16 @@ public class Player : MonoBehaviour {
     private BoxCollider2D boxCollider2d;
     private Animator anim;
 
-    private bool poweredUp;
-    private float invincibilityCoolDown;
+    private bool isAlive = true;
+    private float deathWaitTime = 0f;
+    private bool poweredUp = false;
+    private float invincibilityCoolDown = 0f;
 
     // Start is called before the first frame update
     void Start() {
         myRigidBody = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         boxCollider2d = GetComponent<BoxCollider2D>();
-        poweredUp = false;
-        invincibilityCoolDown = 0f;
     }
 
     // Update is called once per frame
@@ -38,6 +38,7 @@ public class Player : MonoBehaviour {
         handleMovement();
         handleAnimation();
         handleInvincibility();
+        handleDeath();
     }
 
     /// <summary>
@@ -50,16 +51,11 @@ public class Player : MonoBehaviour {
             StartCoroutine(playPowerDownAnim());
         } else if (invincibilityCoolDown <= 0f) {
             // TODO: Play death animation
-            // decrement lives
-            Inventory.Instance.Died();
 
-            if (Inventory.Instance.GetNumLives() < 0) {
-                // if run out of lives, go to game over scene
-                SceneManager.LoadScene(Constants.GAME_OVER_SCENE);
-            } else {
-                // reset stage
-                SceneManager.LoadScene(Constants.STAGE_SCENE);
-            }
+            // get camera to stop following player
+            CustomCamera cam = GameObject.FindObjectOfType<CustomCamera>();
+            cam.StopFollowingPlayer();
+            isAlive = false;
         }
     }
 
@@ -101,7 +97,14 @@ public class Player : MonoBehaviour {
     /// Move the player
     /// </summary>
     private void handleMovement() {
-        if (!EndStage.Instance.HasStageFinished()) {
+        if (!isAlive && deathWaitTime < Constants.DEATH_WAIT_TIME) {
+            // died so move player to left side of the screen
+            deathWaitTime += Time.deltaTime;
+            myRigidBody.velocity = new Vector2(
+                -MoveSpeed * 2,
+                myRigidBody.velocity.y
+            );
+        } else if (!EndStage.Instance.HasStageFinished()) {
             // if game is still continuing
             if (canMove) {
                 float moveX = Input.GetAxisRaw("Horizontal");
@@ -123,6 +126,20 @@ public class Player : MonoBehaviour {
                 EndStage.Instance.PlayEndAnimation(poweredUp);
                 cam.StopFollowingPlayer();
                 Destroy(this.gameObject);
+            }
+        }
+    }
+
+    private void handleDeath() {
+        if (!isAlive && deathWaitTime >= Constants.DEATH_WAIT_TIME) {
+            Inventory.Instance.Died();
+
+            if (Inventory.Instance.GetNumLives() < 0) {
+                // if run out of lives, go to game over scene
+                SceneManager.LoadScene(Constants.GAME_OVER_SCENE);
+            } else {
+                // reset stage
+                SceneManager.LoadScene(Constants.STAGE_SCENE);
             }
         }
     }
@@ -162,6 +179,10 @@ public class Player : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Play the power up animation
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator playPowerUpAnim() {
         anim.SetBool("poweringUp", true);
 
@@ -172,6 +193,10 @@ public class Player : MonoBehaviour {
         yield break;
     }
 
+    /// <summary>
+    /// Play the power down animation
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator playPowerDownAnim() {
         anim.SetBool("poweringDown", true);
 
