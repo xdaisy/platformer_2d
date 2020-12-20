@@ -90,6 +90,7 @@ public class Player : MonoBehaviour {
     /// Make the player jump
     /// </summary>
     private void jump() {
+        AudioManager.Instance.PlaySFX(Constants.JUMP_SFX);
         myRigidBody.velocity = Vector2.up * JumpMovement;
     }
 

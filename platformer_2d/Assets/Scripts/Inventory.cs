@@ -12,14 +12,14 @@ public class Inventory : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
-        if (Inventory.Instance == null) {
+        if (Instance == null) {
             Instance = this;
             NumCatGrass = 0;
             NumLives = Constants.DEFAULT_LIVES;
             Score = 0;
             DontDestroyOnLoad(this.gameObject);
         } else {
-            Destroy(this);
+            Destroy(this.gameObject);
         }
     }
 
