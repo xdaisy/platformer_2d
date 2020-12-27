@@ -26,7 +26,7 @@ public class Roomba : Enemy {
     /// Roomba follows the player in its movement
     /// </summary>
     private void move() {
-        if (!EndStage.Instance.HasStageFinished()) {
+        if (!EndStage.Instance.HasStageFinished()){
             // if stage is not finished
             Vector2 newPos = new Vector2(player.position.x, this.transform.position.y); // follow player
             int moveSpeed = this.GetMoveSpeed();

@@ -62,9 +62,12 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 99598fdb6c9a8924c9c36f679b09add0, type: 3}
   - {fileID: 8300000, guid: 0947d0f0d50a91f4eabbb6ec11f82785, type: 3}
   - {fileID: 8300000, guid: 5775668f98d4a774894995227f476f6d, type: 3}
+  - {fileID: 8300000, guid: 4006b71193702ea4aad728a05a17f482, type: 3}
   SFX:
   - {fileID: 8300000, guid: ae20c45148b22ed4f9081a3a81996929, type: 3}
   - {fileID: 8300000, guid: 7c4609aeb44f73443ac43a3bc11db56c, type: 3}
+  - {fileID: 8300000, guid: 9ccc628b6fbf08c40ae5f2fa4b14cab7, type: 3}
+  - {fileID: 8300000, guid: 54746fac49c08c541832d765ce6d2948, type: 3}
   AudioSource: {fileID: 2873754969439704664}
 --- !u!1 &6868230199267471328
 GameObject:

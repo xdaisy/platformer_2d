@@ -30,9 +30,9 @@ public class Inventory : MonoBehaviour {
     public void AddCatGrass(int numCatGrass) {
         NumCatGrass += numCatGrass;
 
-        if (NumCatGrass >= 100) {
-            // if get 100 cat grass, get an extra life
-            NumCatGrass -= 100;
+        if (NumCatGrass >= 5) {
+            // if get 5 cat grass, get an extra life
+            NumCatGrass -= 5;
             NumLives++;
         }
     }

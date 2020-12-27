@@ -37,7 +37,7 @@ public class EndStage : MonoBehaviour {
 
         yield return new WaitForSeconds(animationTime);
 
-        SceneManager.LoadScene(Constants.WIN_SCENE);
+        SceneManager.LoadScene(Constants.CREDIT_SCENE);
     }
 
     /// <summary>

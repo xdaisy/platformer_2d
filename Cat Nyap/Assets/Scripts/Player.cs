@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 public class Player : MonoBehaviour {
     public float MoveSpeed;
     public float JumpMovement;
+    public PauseMenu PauseMenu;
 
     [SerializeField] private LayerMask platformLayerMask; // which layer want to hit with raycast
     [SerializeField] private float invincibilityFrame;
@@ -31,6 +32,17 @@ public class Player : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+        bool isOpened = PauseMenu.IsOpen();
+        if (isAlive && !EndStage.Instance.HasStageFinished() && Input.GetButtonDown("Pause")) {
+            // pause the game
+            if (isOpened) {
+                // menu is open, close it
+                PauseMenu.CloseMenu();
+            } else {
+                // menu is not open, open it
+                PauseMenu.OpenMenu();
+            }
+        }
         if (isGrounded() && Input.GetButtonDown("Jump")) {
             jump();
         }
@@ -46,12 +58,11 @@ public class Player : MonoBehaviour {
     /// </summary>
     public void Hit() {
         if (invincibilityCoolDown <= 0f && poweredUp) {
+            AudioManager.Instance.PlaySFX(Constants.POWER_DOWN_SFX);
             poweredUp = false;
             invincibilityCoolDown = invincibilityFrame;
             StartCoroutine(playPowerDownAnim());
         } else if (invincibilityCoolDown <= 0f) {
-            // TODO: Play death animation
-
             // get camera to stop following player
             CustomCamera cam = GameObject.FindObjectOfType<CustomCamera>();
             cam.StopFollowingPlayer();
@@ -65,6 +76,7 @@ public class Player : MonoBehaviour {
     public void PowerUp() {
         if (!poweredUp) {
             // power up
+            AudioManager.Instance.PlaySFX(Constants.POWER_UP_SFX);
             StartCoroutine(playPowerUpAnim());
             poweredUp = true;
         }
