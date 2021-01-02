@@ -43,7 +43,8 @@ public class Player : MonoBehaviour {
                 PauseMenu.OpenMenu();
             }
         }
-        if (isGrounded() && Input.GetButtonDown("Jump")) {
+        if (isAlive && isGrounded() && Input.GetButtonDown("Jump")) {
+            // jump if alive and on the ground
             jump();
         }
 
@@ -66,6 +67,7 @@ public class Player : MonoBehaviour {
             // get camera to stop following player
             CustomCamera cam = GameObject.FindObjectOfType<CustomCamera>();
             cam.StopFollowingPlayer();
+            Destroy(myRigidBody);
             isAlive = false;
         }
     }
@@ -87,6 +89,14 @@ public class Player : MonoBehaviour {
     /// </summary>
     public void ApplyBounce() {
         jump();
+    }
+
+    /// <summary>
+    /// Get whether or not the player is still alive
+    /// </summary>
+    /// <returns>True if the player is still alive, false otherwise</returns>
+    public bool GetIsAlive() {
+        return isAlive;
     }
 
     /// <summary>
@@ -113,10 +123,7 @@ public class Player : MonoBehaviour {
         if (!isAlive && deathWaitTime < Constants.DEATH_WAIT_TIME) {
             // died so move player to left side of the screen
             deathWaitTime += Time.deltaTime;
-            myRigidBody.velocity = new Vector2(
-                -MoveSpeed * 2,
-                myRigidBody.velocity.y
-            );
+            this.transform.position = this.transform.position + (Vector3.left * 0.25f);
         } else if (!EndStage.Instance.HasStageFinished()) {
             // if game is still continuing
             if (canMove) {
@@ -162,7 +169,7 @@ public class Player : MonoBehaviour {
     /// </summary>
     private void handleAnimation() {
         if (canMove) {
-            float moveX = myRigidBody.velocity.x;
+            float moveX = isAlive ? myRigidBody.velocity.x : -1f;
 
             anim.SetFloat("xMove", moveX);
             anim.SetBool("poweredUp", poweredUp);
@@ -171,15 +178,22 @@ public class Player : MonoBehaviour {
                 anim.SetFloat("lastXMove", moveX);
             }
 
-            if (isGrounded()) {
-                // is on the ground
-                anim.SetBool("isJumping", false);
-                anim.SetBool("isMoving", moveX > 0.1 || moveX < -0.1);
+            bool isJumping = false;
+            bool isMoving = false;
+
+            if (isAlive && isGrounded()) {
+                // is on the ground and is alive
+                isMoving = moveX > 0.1 || moveX < -0.1;
+            } else if (isAlive) {
+                // is in the air and is alive
+                isJumping = true;
             } else {
-                // is in the air
-                anim.SetBool("isMoving", false);
-                anim.SetBool("isJumping", true);
+                // is dead
+                isMoving = true;
             }
+
+            anim.SetBool("isMoving", isMoving);
+            anim.SetBool("isJumping", isJumping);
         }
     }
 

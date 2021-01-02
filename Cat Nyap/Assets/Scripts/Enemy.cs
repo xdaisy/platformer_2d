@@ -22,6 +22,11 @@ public class Enemy : MonoBehaviour {
                 // Not Up
                 Player player = other.gameObject.GetComponent<Player>();
                 player.Hit();
+                if (!player.GetIsAlive()) {
+                    // if the player isn't still alive, set isTrigger to true
+                    BoxCollider2D boxCollider = this.GetComponent<BoxCollider2D>();
+                    boxCollider.isTrigger = true;
+                }
             }
         }
     }
